@@ -1,4 +1,4 @@
-package br.com.challenge.caju.transaction.authorization.service.transaction.authorization.service;
+package br.com.challenge.caju.transaction.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
