@@ -1,6 +1,5 @@
 package br.com.challenge.caju.transaction.service.gateways.impl;
 
-import br.com.challenge.caju.transaction.service.exceptions.AccountNotFound;
 import br.com.challenge.caju.transaction.service.gateways.AccountGateway;
 import br.com.challenge.caju.transaction.service.gateways.entities.AccountEntity;
 import br.com.challenge.caju.transaction.service.gateways.repositories.AccountRepository;
@@ -23,7 +22,7 @@ public class AccountGatewayImpl implements AccountGateway {
     @Override
     public AccountDTO createAccount(AccountRequest request) {
 
-        AccountEntity entity =mapper.requestToEntity(request);
+        AccountEntity entity = mapper.requestToEntity(request);
         entity = repository.save(entity);
         return mapper.entityToDto(entity);
     }
@@ -38,7 +37,5 @@ public class AccountGatewayImpl implements AccountGateway {
     public void updateAccount(final AccountDTO dto){
         final var entity = mapper.dtoToEntity(dto);
         repository.save(entity);
-
     }
-
 }

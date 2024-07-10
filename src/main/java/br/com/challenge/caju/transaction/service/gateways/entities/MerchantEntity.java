@@ -6,34 +6,24 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "transaction")
-public class TransactionEntity {
+@Entity(name = "merchant")
+public class MerchantEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
     private String id;
 
-    @Column(name = "total_amount", nullable = false)
-    private BigDecimal totalAmount;
+    @Column(name = "merchant_name", nullable = false)
+    private String merchantName;
 
     @Column(name = "mcc", nullable = false)
     private String mcc;
-
-    @Column(name = "merchant", nullable = false)
-    private String merchant;
-
-/*    @ManyToOne
-    @JoinColumn(name="account_account_id", nullable = false)
-    @JsonIgnore
-    private AccountEntity account;*/
-
 }

@@ -7,6 +7,7 @@ import br.com.challenge.caju.transaction.service.models.dtos.TransactionDTO;
 import br.com.challenge.caju.transaction.service.models.requests.TransactionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TransactionGatewayImpl implements TransactionGateway {
@@ -18,6 +19,7 @@ public class TransactionGatewayImpl implements TransactionGateway {
     private TransactionMapper mapper;
 
     @Override
+    @Transactional
     public TransactionDTO createUserBalance(TransactionRequest request) {
 
         var entity = mapper.requestToEntity(request);
