@@ -1,4 +1,4 @@
-package br.com.challenge.caju.transaction.authorization.service.transaction.authorization.service.dtos.responses;
+package br.com.challenge.caju.transaction.service.models.responses;
 
 import lombok.Builder;
 import lombok.Data;
