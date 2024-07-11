@@ -1,4 +1,4 @@
-package br.com.challenge.caju.transaction.service.services;
+package br.com.challenge.caju.transaction.service.services.accounts;
 
 import br.com.challenge.caju.transaction.service.enums.BalanceType;
 

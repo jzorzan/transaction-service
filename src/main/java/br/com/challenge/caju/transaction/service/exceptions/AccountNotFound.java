@@ -1,4 +1,4 @@
 package br.com.challenge.caju.transaction.service.exceptions;
 
-public class AccountNotFound extends RuntimeException{
+public class AccountNotFound extends RuntimeException {
 }

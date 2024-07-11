@@ -2,7 +2,7 @@ package br.com.challenge.caju.transaction.service.controllers;
 
 
 import br.com.challenge.caju.transaction.service.domains.responses.AccountResponse;
-import br.com.challenge.caju.transaction.service.services.impl.AccountServiceImpl;
+import br.com.challenge.caju.transaction.service.services.accounts.impl.AccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +18,7 @@ public class AccountController {
     private AccountServiceImpl accountService;
 
     @GetMapping("/{accountId}")
-    public ResponseEntity<AccountResponse> getTransactionsByAccount(@PathVariable final String accountId){
+    public ResponseEntity<AccountResponse> getTransactionsByAccount(@PathVariable final String accountId) {
         final var response = accountService.getTransactionsByAccount(accountId);
         return ResponseEntity.ok(response);
     }

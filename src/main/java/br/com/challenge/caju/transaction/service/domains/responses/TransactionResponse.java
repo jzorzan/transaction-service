@@ -1,6 +1,5 @@
 package br.com.challenge.caju.transaction.service.domains.responses;
 
-import br.com.challenge.caju.transaction.service.enums.TransactionCode;
 import lombok.Builder;
 import lombok.Data;
 

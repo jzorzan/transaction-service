@@ -2,7 +2,7 @@ package br.com.challenge.caju.transaction.service.controllers;
 
 import br.com.challenge.caju.transaction.service.domains.requests.TransactionRequest;
 import br.com.challenge.caju.transaction.service.domains.responses.TransactionResponse;
-import br.com.challenge.caju.transaction.service.services.TransactionService;
+import br.com.challenge.caju.transaction.service.services.transactions.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +19,7 @@ public class TransactionController {
 
 
     @PostMapping("/authorize")
-    public ResponseEntity<TransactionResponse> authorizeTransaction(@RequestBody TransactionRequest request){
+    public ResponseEntity<TransactionResponse> authorizeTransaction(@RequestBody TransactionRequest request) {
 
         final var response = transactionService.authorizeTransaction(request);
         return ResponseEntity.ok(response);
