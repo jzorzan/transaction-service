@@ -8,6 +8,4 @@ import org.mapstruct.Mapper;
 public interface TransactionMapper {
 
     Transaction requestToEntity(TransactionRequest request);
-
-
 }

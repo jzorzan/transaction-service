@@ -1,6 +1,7 @@
 package br.com.challenge.caju.transaction.service.controllers;
 
 import br.com.challenge.caju.transaction.service.domains.requests.TransactionRequest;
+import br.com.challenge.caju.transaction.service.domains.responses.TransactionAccountResponse;
 import br.com.challenge.caju.transaction.service.domains.responses.TransactionResponse;
 import br.com.challenge.caju.transaction.service.services.transactions.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,9 @@ public class TransactionController {
     }
 
     @GetMapping("/account/{account_id}")
-    public ResponseEntity<Object> getTransactionByAccount(@PathVariable("account_id") final String accountId){
-        return null;
+    public ResponseEntity<TransactionAccountResponse> getTransactionByAccount(@PathVariable("account_id") final String accountId) {
+
+        final var response = transactionService.getTransactionsByAccount(accountId);
+        return ResponseEntity.ok(response);
     }
 }
