@@ -1,6 +1,5 @@
 package br.com.challenge.caju.transaction.service.services.accounts.impl;
 
-import br.com.challenge.caju.transaction.service.domains.responses.AccountResponse;
 import br.com.challenge.caju.transaction.service.enums.BalanceType;
 import br.com.challenge.caju.transaction.service.gateways.AccountGateway;
 import br.com.challenge.caju.transaction.service.gateways.entities.Account;
@@ -24,11 +23,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountMapper accountMapper;
-
-    public AccountResponse getTransactionsByAccount(final String accountId) {
-        final var account = accountGateway.findById(accountId).orElse(null);
-        return accountMapper.entityToResponse(account);
-    }
 
     public boolean authorizeTransaction(final String accountId, final BigDecimal amount, final BalanceType balanceType) {
 

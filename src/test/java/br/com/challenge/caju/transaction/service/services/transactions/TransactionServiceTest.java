@@ -5,6 +5,7 @@ import br.com.challenge.caju.transaction.service.domains.responses.TransactionRe
 import br.com.challenge.caju.transaction.service.enums.BalanceType;
 import br.com.challenge.caju.transaction.service.enums.MCC;
 import br.com.challenge.caju.transaction.service.enums.TransactionCode;
+import br.com.challenge.caju.transaction.service.exceptions.InvalidFieldException;
 import br.com.challenge.caju.transaction.service.gateways.MerchantGateway;
 import br.com.challenge.caju.transaction.service.gateways.TransactionGateway;
 import br.com.challenge.caju.transaction.service.gateways.entities.Merchant;
@@ -20,11 +21,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static br.com.challenge.caju.transaction.service.utils.TestConstants.MOCKED_ACCOUNT_ID;
-import static br.com.challenge.caju.transaction.service.utils.TestConstants.MOCKED_TOTAL_AMOUNT_100;
+import static br.com.challenge.caju.transaction.service.utils.constants.Constants.MESSAGE_INVALID_FIELD_VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -45,75 +46,162 @@ public class TransactionServiceTest {
     @InjectMocks
     private TransactionServiceImpl transactionService;
 
-    private TransactionRequest transactionRequest;
+    private TransactionRequest validTransactionRequest;
+    private Merchant validMerchant;
 
     @BeforeEach
     void setUp() {
-        transactionRequest = TransactionRequest.builder()
-                .accountId(MOCKED_ACCOUNT_ID)
+        validTransactionRequest = TransactionRequest.builder()
+                .accountId("validAccountId")
+                .totalAmount(BigDecimal.TEN)
+                .merchant("validMerchant")
+                .build();
+
+        validMerchant = Merchant.builder()
+                .merchantName("validMerchant")
                 .mcc(MCC.FOOD_5411.getCode())
-                .merchant("Test Merchant")
-                .totalAmount(MOCKED_TOTAL_AMOUNT_100)
                 .build();
     }
 
     @Test
-    void whenMerchantIsKnown_thenTransactionIsApproved() {
-        Merchant merchant = new Merchant();
-        merchant.setMcc(MCC.FOOD_5411.getCode());
+    void authorizeTransaction_SuccessfulAuthorization_ReturnsApproved() {
 
-        when(merchantGateway.findByMerchantName(anyString())).thenReturn(Optional.of(merchant));
-        when(accountService.authorizeTransaction(anyString(), any(BigDecimal.class), any(BalanceType.class))).thenReturn(true);
 
-        TransactionResponse response = transactionService.authorizeTransaction(transactionRequest);
+        when(merchantGateway.findByMerchantName("validMerchant")).thenReturn(Optional.of(validMerchant));
+        when(accountService.authorizeTransaction("validAccountId", BigDecimal.TEN, BalanceType.FOOD))
+                .thenReturn(true);
+
+
+        TransactionResponse response = transactionService.authorizeTransaction(validTransactionRequest);
+
 
         assertEquals(TransactionCode.APPROVED.getCode(), response.getCode());
-        verify(transactionGateway, times(1)).saveTransaction(any(TransactionRequest.class));
-        verify(accountService, times(1)).authorizeTransaction("12345",
-                new BigDecimal("100.00"), BalanceType.FOOD);
+        verify(transactionGateway, times(1)).saveTransaction(validTransactionRequest);
     }
 
 
     @Test
-    void whenMerchantIsKnown_thenTransactionIsNotApprovedDueToInsufficientFunds() {
-        Merchant merchant = new Merchant();
-        merchant.setMcc(MCC.FOOD_5411.getCode());
+    void authorizeTransaction_InsufficientFunds_ReturnsInsufficientFund() {
 
-        when(merchantGateway.findByMerchantName(anyString())).thenReturn(Optional.of(merchant));
-        when(accountService.authorizeTransaction(anyString(), any(BigDecimal.class), any(BalanceType.class))).thenReturn(false);
+        when(merchantGateway.findByMerchantName("validMerchant")).thenReturn(Optional.of(validMerchant));
+        when(accountService.authorizeTransaction("validAccountId", BigDecimal.TEN, BalanceType.FOOD))
+                .thenReturn(false);
 
-        TransactionResponse response = transactionService.authorizeTransaction(transactionRequest);
+
+        TransactionResponse response = transactionService.authorizeTransaction(validTransactionRequest);
+
 
         assertEquals(TransactionCode.INSUFFICIENT_FUND.getCode(), response.getCode());
         verify(transactionGateway, times(0)).saveTransaction(any(TransactionRequest.class));
-        verify(accountService, times(1)).authorizeTransaction("12345", new BigDecimal("100.00"), BalanceType.FOOD);
     }
 
     @Test
-    void whenMerchantIsUnknown_thenTransactionIsApprovedWithDefaultBalanceType() {
-        when(merchantGateway.findByMerchantName(anyString())).thenReturn(Optional.empty());
-        when(accountService.authorizeTransaction(anyString(), any(BigDecimal.class), any(BalanceType.class))).thenReturn(true);
+    void authorizeTransaction_UnknownMerchant_ApprovesWithDefaultBalanceType() {
 
-        TransactionResponse response = transactionService.authorizeTransaction(transactionRequest);
+        validTransactionRequest.setMerchant("unknown");
+
+
+        when(merchantGateway.findByMerchantName("unknown")).thenReturn(Optional.empty());
+        when(accountService.authorizeTransaction("validAccountId", BigDecimal.TEN, BalanceType.CASH))
+                .thenReturn(true);
+
+
+        TransactionResponse response = transactionService.authorizeTransaction(validTransactionRequest);
+
 
         assertEquals(TransactionCode.APPROVED.getCode(), response.getCode());
-        verify(transactionGateway, times(1)).saveTransaction(any(TransactionRequest.class));
-        verify(accountService, times(1)).authorizeTransaction("12345", new BigDecimal("100.00"), BalanceType.CASH);
+        verify(transactionGateway, times(1)).saveTransaction(validTransactionRequest);
     }
 
     @Test
-    void whenMerchantIsUnknown_thenTransactionIsNotApprovedWithDefaultBalanceType() {
-        transactionRequest.setMerchant("unknown");
+    void authorizeTransaction_UnknownMerchant_NotApprovedWithDefaultBalanceType() {
 
-        when(merchantGateway.findByMerchantName(anyString())).thenReturn(Optional.empty());
-        when(accountService.authorizeTransaction(anyString(), any(BigDecimal.class), any(BalanceType.class))).thenReturn(false);
+        validTransactionRequest.setMerchant("unknown");
 
-        TransactionResponse response = transactionService.authorizeTransaction(transactionRequest);
+        when(merchantGateway.findByMerchantName("unknown")).thenReturn(Optional.empty());
+        when(accountService.authorizeTransaction("validAccountId", BigDecimal.TEN, BalanceType.CASH))
+                .thenReturn(false);
+
+
+        TransactionResponse response = transactionService.authorizeTransaction(validTransactionRequest);
 
         assertEquals(TransactionCode.INSUFFICIENT_FUND.getCode(), response.getCode());
         verify(transactionGateway, times(0)).saveTransaction(any(TransactionRequest.class));
-        verify(accountService, times(1)).authorizeTransaction("12345", new BigDecimal("100.00"), BalanceType.CASH);
     }
 
+    @Test
+    void validateRequest_InvalidRequestBody_ThrowsInvalidFieldException() {
 
+        InvalidFieldException exception = assertThrows(InvalidFieldException.class,
+                () -> transactionService.authorizeTransaction(null));
+
+        assertEquals(MESSAGE_INVALID_FIELD_VALUE, exception.getMessage());
+        assertTrue(exception.getFields().contains("Transaction request body is null"));
+    }
+
+    @Test
+    void validateRequest_EmptyAccountId_ThrowsInvalidFieldException() {
+
+        final var request = TransactionRequest.builder()
+                .accountId(null)
+                .totalAmount(BigDecimal.TEN)
+                .merchant("validMerchant")
+                .build();
+
+
+        InvalidFieldException exception = assertThrows(InvalidFieldException.class,
+                () -> transactionService.authorizeTransaction(request));
+
+        assertEquals(MESSAGE_INVALID_FIELD_VALUE, exception.getMessage());
+        assertTrue(exception.getFields().contains("accountId"));
+    }
+
+    @Test
+    void validateRequest_NullTotalAmount_ThrowsInvalidFieldException() {
+
+        final var request = TransactionRequest.builder()
+                .accountId("validAccountId")
+                .totalAmount(null)
+                .merchant("validMerchant")
+                .build();
+
+        InvalidFieldException exception = assertThrows(InvalidFieldException.class,
+                () -> transactionService.authorizeTransaction(request));
+
+        assertEquals(MESSAGE_INVALID_FIELD_VALUE, exception.getMessage());
+        assertTrue(exception.getFields().contains("totalAmount"));
+    }
+
+    @Test
+    void validateRequest_ZeroTotalAmount_ThrowsInvalidFieldException() {
+
+        final var request = TransactionRequest.builder()
+                .accountId("validAccountId")
+                .totalAmount(BigDecimal.ZERO)
+                .merchant("validMerchant")
+                .build();
+
+        InvalidFieldException exception = assertThrows(InvalidFieldException.class,
+                () -> transactionService.authorizeTransaction(request));
+
+        assertEquals(MESSAGE_INVALID_FIELD_VALUE, exception.getMessage());
+        assertTrue(exception.getFields().contains("totalAmount"));
+    }
+
+    @Test
+    void validateRequest_EmptyMerchant_ThrowsInvalidFieldException() {
+
+        final var request = TransactionRequest.builder()
+                .accountId("validAccountId")
+                .totalAmount(BigDecimal.TEN)
+                .merchant("")
+                .build();
+
+        // Test & Verify
+        InvalidFieldException exception = assertThrows(InvalidFieldException.class,
+                () -> transactionService.authorizeTransaction(request));
+
+        assertEquals("Invalid transaction request. Required fields are missing or invalid.", exception.getMessage());
+        assertTrue(exception.getFields().contains("merchant"));
+    }
 }
