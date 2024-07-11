@@ -3,7 +3,6 @@ package br.com.challenge.caju.transaction.service.services.accounts.impl;
 import br.com.challenge.caju.transaction.service.enums.BalanceType;
 import br.com.challenge.caju.transaction.service.gateways.AccountGateway;
 import br.com.challenge.caju.transaction.service.gateways.entities.Account;
-import br.com.challenge.caju.transaction.service.mappers.AccountMapper;
 import br.com.challenge.caju.transaction.service.services.accounts.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountGateway accountGateway;
-
-    @Autowired
-    private AccountMapper accountMapper;
 
     public boolean authorizeTransaction(final String accountId, final BigDecimal amount, final BalanceType balanceType) {
 
