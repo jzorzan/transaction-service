@@ -1,11 +1,11 @@
 package br.com.challenge.caju.transaction.service.services;
 
-import br.com.challenge.caju.transaction.service.models.requests.TransactionRequest;
-import br.com.challenge.caju.transaction.service.models.responses.TransactionResponse;
+import br.com.challenge.caju.transaction.service.domains.requests.TransactionRequest;
+import br.com.challenge.caju.transaction.service.domains.responses.TransactionResponse;
 
 public interface TransactionService {
 
-    TransactionResponse processTransaction(TransactionRequest request);
+    TransactionResponse authorizeTransaction(TransactionRequest request);
 
 
 }

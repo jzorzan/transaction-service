@@ -1,15 +1,15 @@
 package br.com.challenge.caju.transaction.service.mappers;
 
-import br.com.challenge.caju.transaction.service.gateways.entities.MerchantEntity;
-import br.com.challenge.caju.transaction.service.models.dtos.MerchantDTO;
+import br.com.challenge.caju.transaction.service.domains.dtos.MerchantDTO;
+import br.com.challenge.caju.transaction.service.gateways.entities.Merchant;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface MerchantMapper {
 
-    MerchantDTO entityToDto(MerchantEntity entity);
+    MerchantDTO entityToDto(Merchant entity);
 
-    MerchantEntity dtoToEntity(MerchantDTO dto);
+    Merchant dtoToEntity(MerchantDTO dto);
 
 
 }

@@ -1,5 +1,15 @@
 --- Drop the table if it exists
- DROP TABLE IF EXISTS account;
+DROP TABLE IF EXISTS merchant;
+CREATE TABLE IF NOT EXISTS merchant (
+    id UUID PRIMARY KEY,
+    merchant_name VARCHAR(255) NOT NULL,
+    mcc VARCHAR(4) NOT NULL
+);
+
+
+
+
+DROP TABLE IF EXISTS account;
 
  -- Create the table
  CREATE TABLE account (

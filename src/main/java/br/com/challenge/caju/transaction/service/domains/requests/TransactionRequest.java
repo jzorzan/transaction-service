@@ -1,4 +1,4 @@
-package br.com.challenge.caju.transaction.service.models.requests;
+package br.com.challenge.caju.transaction.service.domains.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

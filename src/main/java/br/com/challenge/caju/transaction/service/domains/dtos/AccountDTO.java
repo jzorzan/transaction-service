@@ -1,4 +1,4 @@
-package br.com.challenge.caju.transaction.service.models.dtos;
+package br.com.challenge.caju.transaction.service.domains.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
