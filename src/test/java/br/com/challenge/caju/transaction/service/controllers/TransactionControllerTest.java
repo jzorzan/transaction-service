@@ -10,7 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,7 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(TransactionController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class TransactionControllerTest {
 
     @Autowired
@@ -83,6 +85,23 @@ class TransactionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(transactionResponse)))
                 .andExpect(jsonPath("$.code").value(TransactionCode.INSUFFICIENT_FUND.getCode()));
+
+        Mockito.verify(transactionService, Mockito.times(1)).authorizeTransaction(any(TransactionRequest.class));
+    }
+
+    @Test
+    void whenAuthorizeTransactionWithInvalidRequest_thenReturnNotProcessedResponse() throws Exception {
+
+        transactionResponse.setCode(TransactionCode.NOT_PROCESSED.getCode());
+
+        when(transactionService.authorizeTransaction(any(TransactionRequest.class))).thenReturn(transactionResponse);
+
+        mockMvc.perform(post(URL_TRANSACTION_AUTHORIZE)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(transactionRequest)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(transactionResponse)))
+                .andExpect(jsonPath("$.code").value(TransactionCode.NOT_PROCESSED.getCode()));
 
         Mockito.verify(transactionService, Mockito.times(1)).authorizeTransaction(any(TransactionRequest.class));
     }

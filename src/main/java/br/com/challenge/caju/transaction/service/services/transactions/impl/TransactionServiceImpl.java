@@ -5,6 +5,7 @@ import br.com.challenge.caju.transaction.service.domains.responses.TransactionRe
 import br.com.challenge.caju.transaction.service.enums.BalanceType;
 import br.com.challenge.caju.transaction.service.enums.MCC;
 import br.com.challenge.caju.transaction.service.enums.TransactionCode;
+import br.com.challenge.caju.transaction.service.exceptions.InvalidFieldException;
 import br.com.challenge.caju.transaction.service.gateways.MerchantGateway;
 import br.com.challenge.caju.transaction.service.gateways.TransactionGateway;
 import br.com.challenge.caju.transaction.service.gateways.entities.Merchant;
@@ -13,10 +14,14 @@ import br.com.challenge.caju.transaction.service.services.transactions.Transacti
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
+import static br.com.challenge.caju.transaction.service.utils.constants.Constants.MESSAGE_INVALID_FIELD_VALUE;
 import static br.com.challenge.caju.transaction.service.utils.constants.Constants.MESSAGE_SAVING_TRANSACTION_AUTHORIZED;
 
 @Service
@@ -36,13 +41,15 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public TransactionResponse authorizeTransaction(TransactionRequest transactionRequest) {
 
+        validateRequest(transactionRequest);
+
         final String accountId = transactionRequest.getAccountId();
         final BigDecimal totalAmount = transactionRequest.getTotalAmount();
         final String merchantName = transactionRequest.getMerchant();
 
         Optional<Merchant> merchant = merchantGateway.findByMerchantName(merchantName);
 
-        final String mcc = merchant.isPresent() ? merchant.get().getMcc() : transactionRequest.getMerchant();
+        final String mcc = merchant.isPresent() ? merchant.get().getMcc() : transactionRequest.getMcc();
 
         final BalanceType balanceType = MCC.getBalanceType(mcc);
         boolean authorized = accountService.authorizeTransaction(accountId, totalAmount, balanceType);
@@ -59,5 +66,27 @@ public class TransactionServiceImpl implements TransactionService {
         return TransactionResponse.builder().code(code).build();
     }
 
+    private void validateRequest(TransactionRequest transactionRequest) {
+        Set<String> invalidFields = new HashSet<>();
+
+        if (transactionRequest == null) {
+            invalidFields.add("Transaction request body is null");
+
+        } else {
+            if (!StringUtils.hasText(transactionRequest.getAccountId())) {
+                invalidFields.add("accountId");
+            }
+            if (transactionRequest.getTotalAmount() == null || transactionRequest.getTotalAmount().compareTo(BigDecimal.ZERO) <= 0) {
+                invalidFields.add("totalAmount");
+            }
+            if (!StringUtils.hasText(transactionRequest.getMerchant())) {
+                invalidFields.add("merchant");
+            }
+        }
+
+        if (!invalidFields.isEmpty()) {
+            throw new InvalidFieldException(MESSAGE_INVALID_FIELD_VALUE, invalidFields);
+        }
+    }
 
 }
