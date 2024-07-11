@@ -1,13 +1,13 @@
 package br.com.challenge.caju.transaction.service.gateways;
 
-import br.com.challenge.caju.transaction.service.models.dtos.AccountDTO;
-import br.com.challenge.caju.transaction.service.models.requests.AccountRequest;
+import br.com.challenge.caju.transaction.service.gateways.entities.Account;
+
+import java.util.Optional;
 
 public interface AccountGateway {
 
-    AccountDTO createAccount(AccountRequest request);
+    Optional<Account> findById(final String accountId);
 
-    AccountDTO getAccountById(final String accountId);
-    void updateAccount(AccountDTO dto);
+    void updateAccount(Account dto);
 
 }

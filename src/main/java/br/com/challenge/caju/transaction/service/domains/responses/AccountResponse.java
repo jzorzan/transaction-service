@@ -1,4 +1,4 @@
-package br.com.challenge.caju.transaction.service.models.responses;
+package br.com.challenge.caju.transaction.service.domains.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
