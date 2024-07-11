@@ -1,11 +1,10 @@
--- Insert data
-INSERT INTO merchant (id, merchant_name, mcc) VALUES
-    (UUID(), 'UBER TRIP                   SAO PAULO BR', '4121'),
-    (UUID(), 'UBER EATS                   SAO PAULO BR', '5812'),
-    (UUID(), 'PAG*JoseDaSilva             RIO DE JANEI BR', '5411'),
-    (UUID(), 'PICPAY*BILHETEUNICO         GOIANIA BR', '4111');
+-- Example Merchants
+INSERT INTO merchant (name, mcc) VALUES ('UBER TRIP                   SAO PAULO BR', '5999');
+INSERT INTO merchant (name, mcc) VALUES ('UBER EATS                   SAO PAULO BR', '5812');
+INSERT INTO merchant (name, mcc) VALUES ('PAG*JoseDaSilva          RIO DE JANEI BR', '5999');
+INSERT INTO merchant (name, mcc) VALUES ('PICPAY*BILHETEUNICO           GOIANIA BR', '5999');
 
-INSERT INTO ACCOUNT (id, food_balance, meal_balance, cash_balance) VALUES ('123', 100.00, 200.00, 300.00);
-INSERT INTO ACCOUNT (id, food_balance, meal_balance, cash_balance) VALUES ('456', 150.00, 250.00, 350.00);
-INSERT INTO ACCOUNT (id, food_balance, meal_balance, cash_balance) VALUES ('789', 200.00, 300.00, 400.00);
+-- Example Accounts with initial balances
+INSERT INTO account (account_id, food_balance, meal_balance, cash_balance) VALUES ('123', 100.00, 100.00, 100.00);
+INSERT INTO account (account_id, food_balance, meal_balance, cash_balance) VALUES ('124', 50.00, 50.00, 50.00);
 
