@@ -12,7 +12,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {TransactionNotFound.class, AccountNotFound.class})
     @ResponseBody
-    protected ResponseEntity<ErrorMessage> handleNotFound(TransactionNotFound ex){
+    protected ResponseEntity<ErrorMessage> handleNotFound(TransactionNotFound ex) {
         ErrorMessage errorMessage = ErrorMessage.builder()
                 .code("07")
                 .message(ex.getMessage())
@@ -22,7 +22,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {InvalidFieldException.class})
     @ResponseBody
-    protected ResponseEntity<ErrorMessage> handleInvalidField(TransactionNotFound ex){
+    protected ResponseEntity<ErrorMessage> handleInvalidField(TransactionNotFound ex) {
         ErrorMessage errorMessage = ErrorMessage.builder()
                 .code("07")
                 .message(ex.getMessage())

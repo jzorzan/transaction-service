@@ -23,7 +23,7 @@ public class AccountGatewayImpl implements AccountGateway {
         return repository.findById(accountId);
     }
 
-    public void updateAccount(final Account account){
+    public void updateAccount(final Account account) {
         repository.save(account);
     }
 }

@@ -1,6 +1,5 @@
-package br.com.challenge.caju.transaction.service.services.impl;
+package br.com.challenge.caju.transaction.service.services.transactions.impl;
 
-import br.com.challenge.caju.transaction.service.domains.dtos.MerchantDTO;
 import br.com.challenge.caju.transaction.service.domains.requests.TransactionRequest;
 import br.com.challenge.caju.transaction.service.domains.responses.TransactionResponse;
 import br.com.challenge.caju.transaction.service.enums.BalanceType;
@@ -9,8 +8,8 @@ import br.com.challenge.caju.transaction.service.enums.TransactionCode;
 import br.com.challenge.caju.transaction.service.gateways.MerchantGateway;
 import br.com.challenge.caju.transaction.service.gateways.TransactionGateway;
 import br.com.challenge.caju.transaction.service.gateways.entities.Merchant;
-import br.com.challenge.caju.transaction.service.services.AccountService;
-import br.com.challenge.caju.transaction.service.services.TransactionService;
+import br.com.challenge.caju.transaction.service.services.accounts.AccountService;
+import br.com.challenge.caju.transaction.service.services.transactions.TransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +45,7 @@ public class TransactionServiceImpl implements TransactionService {
         final String mcc = merchant.isPresent() ? merchant.get().getMcc() : transactionRequest.getMerchant();
 
         final BalanceType balanceType = MCC.getBalanceType(mcc);
-        boolean authorized = accountService.authorizeTransaction(accountId,totalAmount, balanceType);
+        boolean authorized = accountService.authorizeTransaction(accountId, totalAmount, balanceType);
 
         String code;
         if (authorized) {
@@ -59,4 +58,6 @@ public class TransactionServiceImpl implements TransactionService {
 
         return TransactionResponse.builder().code(code).build();
     }
+
+
 }

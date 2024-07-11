@@ -8,10 +8,11 @@ public enum TransactionCode {
 
     private final String code;
 
-    TransactionCode(String code){
+    TransactionCode(String code) {
         this.code = code;
     }
-    public String getCode(){
-        return  code;
+
+    public String getCode() {
+        return code;
     }
 }
