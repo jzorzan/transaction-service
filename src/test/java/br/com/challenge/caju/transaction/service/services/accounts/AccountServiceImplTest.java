@@ -3,7 +3,6 @@ package br.com.challenge.caju.transaction.service.services.accounts;
 import br.com.challenge.caju.transaction.service.enums.BalanceType;
 import br.com.challenge.caju.transaction.service.gateways.AccountGateway;
 import br.com.challenge.caju.transaction.service.gateways.entities.Account;
-import br.com.challenge.caju.transaction.service.mappers.AccountMapper;
 import br.com.challenge.caju.transaction.service.services.accounts.impl.AccountServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,9 +29,6 @@ class AccountServiceImplTest {
 
     @Mock
     private AccountGateway accountGateway;
-
-    @Mock
-    private AccountMapper accountMapper;
 
     @InjectMocks
     private AccountServiceImpl accountService;

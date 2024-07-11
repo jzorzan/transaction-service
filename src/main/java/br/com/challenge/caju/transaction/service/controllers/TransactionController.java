@@ -5,6 +5,8 @@ import br.com.challenge.caju.transaction.service.domains.responses.TransactionRe
 import br.com.challenge.caju.transaction.service.services.transactions.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +22,12 @@ public class TransactionController {
 
     @PostMapping("/authorize")
     public ResponseEntity<TransactionResponse> authorizeTransaction(@RequestBody TransactionRequest request) {
-
         final var response = transactionService.authorizeTransaction(request);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/account/{account_id}")
+    public ResponseEntity<Object> getTransactionByAccount(@PathVariable("account_id") final String accountId){
+        return null;
     }
 }
