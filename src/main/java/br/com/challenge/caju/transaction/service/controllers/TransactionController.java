@@ -3,34 +3,28 @@ package br.com.challenge.caju.transaction.service.controllers;
 import br.com.challenge.caju.transaction.service.domains.requests.TransactionRequest;
 import br.com.challenge.caju.transaction.service.domains.responses.TransactionAccountResponse;
 import br.com.challenge.caju.transaction.service.domains.responses.TransactionResponse;
-import br.com.challenge.caju.transaction.service.services.transactions.TransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/transactions")
-public class TransactionController {
+public interface TransactionController {
 
-    @Autowired
-    private TransactionService transactionService;
+    @Operation(description = "Authorize a transaction",
+            summary = "Authorizes a transaction based on the provided request."
+            )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Transaction authorized successfully with code 00"),
+            @ApiResponse(responseCode = "200", description = "Invalid transaction request with code 07(NOT PROCESSED) or 51(INSUFFICIENT FUND)")
+    })
+    ResponseEntity<TransactionResponse> authorizeTransaction(@RequestBody TransactionRequest request);
 
-
-    @PostMapping("/authorize")
-    public ResponseEntity<TransactionResponse> authorizeTransaction(@RequestBody TransactionRequest request) {
-        final var response = transactionService.authorizeTransaction(request);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/account/{account_id}")
-    public ResponseEntity<TransactionAccountResponse> getTransactionByAccount(@PathVariable("account_id") final String accountId) {
-
-        final var response = transactionService.getTransactionsByAccount(accountId);
-        return ResponseEntity.ok(response);
-    }
+    @Operation(description = "Get transactions by account ID",
+            summary = "Retrieves transactions for a specific account ID.")
+    ResponseEntity<TransactionAccountResponse> getTransactionByAccount(@Parameter(description = "Account ID", required = true)
+                                                                       @PathVariable("account_id") final String accountId);
 }
