@@ -24,6 +24,7 @@ import java.util.Set;
 
 import static br.com.challenge.caju.transaction.service.utils.constants.Constants.MESSAGE_INVALID_FIELD_VALUE;
 import static br.com.challenge.caju.transaction.service.utils.constants.Constants.MESSAGE_SAVING_TRANSACTION_AUTHORIZED;
+import static br.com.challenge.caju.transaction.service.utils.constants.Constants.MESSAGE_SELECTED_BALANCE;
 
 
 @Service
@@ -67,6 +68,7 @@ public class TransactionServiceImpl implements TransactionService {
         final String mcc = merchant.isPresent() ? merchant.get().getMcc() : transactionRequest.getMcc();
 
         final BalanceType balanceType = MCC.getBalanceType(mcc);
+        log.info(MESSAGE_SELECTED_BALANCE, balanceType);
         boolean authorized = accountService.authorizeTransaction(accountId, totalAmount, balanceType);
 
         String code;
