@@ -1,6 +1,6 @@
 # Transaction Service
 
-The **Transaction Authorization Service** is a **Spring Boot application** designed to handle transaction authorization and management using an **in-memory H2 database**. It provides endpoints to authorize transactions, retrieve transactions by account, and integrates with merchant information for transaction processing.
+The **Transaction Service** is a **Spring Boot application** designed to handle transaction authorization and management using an **in-memory H2 database**. It provides endpoints to authorize transactions, retrieve transactions by account, and integrates with merchant information for transaction processing.
 
 ## Table of Contents
 
