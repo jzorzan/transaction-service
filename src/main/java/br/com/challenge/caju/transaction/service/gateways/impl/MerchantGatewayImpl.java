@@ -17,6 +17,5 @@ public class MerchantGatewayImpl implements MerchantGateway {
     @Override
     public Optional<Merchant> findByMerchantName(final String merchantName) {
         return merchantRepository.findByMerchantName(merchantName);
-
     }
 }

@@ -23,7 +23,7 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private String accountId;
 
     @Column(name = "food_balance", nullable = false)
@@ -34,7 +34,4 @@ public class Account {
 
     @Column(name = "cash_balance", nullable = false)
     private BigDecimal cashBalance;
-
-/*    @OneToMany(mappedBy="account")
-    private List<TransactionEntity> transactions;*/
 }

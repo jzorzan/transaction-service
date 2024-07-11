@@ -1,6 +1,7 @@
 package br.com.challenge.caju.transaction.service.services.transactions.impl;
 
 import br.com.challenge.caju.transaction.service.domains.requests.TransactionRequest;
+import br.com.challenge.caju.transaction.service.domains.responses.TransactionAccountResponse;
 import br.com.challenge.caju.transaction.service.domains.responses.TransactionResponse;
 import br.com.challenge.caju.transaction.service.enums.BalanceType;
 import br.com.challenge.caju.transaction.service.enums.MCC;
@@ -24,6 +25,7 @@ import java.util.Set;
 import static br.com.challenge.caju.transaction.service.utils.constants.Constants.MESSAGE_INVALID_FIELD_VALUE;
 import static br.com.challenge.caju.transaction.service.utils.constants.Constants.MESSAGE_SAVING_TRANSACTION_AUTHORIZED;
 
+
 @Service
 @Slf4j
 public class TransactionServiceImpl implements TransactionService {
@@ -36,6 +38,20 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
     private MerchantGateway merchantGateway;
+
+    @Override
+    public TransactionAccountResponse getTransactionsByAccount(final String accountId) {
+
+        if (!StringUtils.hasText(accountId)) {
+            throw new InvalidFieldException(MESSAGE_INVALID_FIELD_VALUE, Set.of("accountId"));
+        }
+
+        final var transactions = transactionGateway.getTransactionByAccount(accountId);
+
+        return TransactionAccountResponse.builder()
+                .transactions(transactions)
+                .build();
+    }
 
 
     @Override
@@ -88,5 +104,4 @@ public class TransactionServiceImpl implements TransactionService {
             throw new InvalidFieldException(MESSAGE_INVALID_FIELD_VALUE, invalidFields);
         }
     }
-
 }
