@@ -21,6 +21,7 @@ public class TransactionController {
 
     @PostMapping("/authorize")
     public ResponseEntity<TransactionResponse> authorizeTransaction(@RequestBody TransactionRequest request) {
+
         final var response = transactionService.authorizeTransaction(request);
         return ResponseEntity.ok(response);
     }
