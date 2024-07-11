@@ -14,7 +14,6 @@ and integrates with merchant information for transaction processing.
 - [Database Configuration](#database-configuration)
 - [Project Structure](#project-structure)
 - [Testing](#testing)
-- [Further Improvements](#further-improvements)
 
 ## Technologies Used
 
