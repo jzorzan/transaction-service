@@ -53,7 +53,6 @@ public class TransactionServiceImpl implements TransactionService {
                 .build();
     }
 
-
     @Override
     public TransactionResponse authorizeTransaction(TransactionRequest transactionRequest) {
 
