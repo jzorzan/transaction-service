@@ -40,24 +40,21 @@ public class TransactionServiceImpl implements TransactionService {
         final String accountId = transactionRequest.getAccountId();
         final BigDecimal totalAmount = transactionRequest.getTotalAmount();
         final String merchantName = transactionRequest.getMerchant();
-        String code;
 
         Optional<Merchant> merchant = merchantGateway.findByMerchantName(merchantName);
-        if(merchant.isPresent()){
 
-            String mcc = merchant.get().getMcc();
-            final BalanceType balanceType = MCC.getBalanceType(mcc);
-            boolean authorized = accountService.authorizeTransaction(accountId,totalAmount, balanceType);
+        final String mcc = merchant.isPresent() ? merchant.get().getMcc() : transactionRequest.getMerchant();
 
-            if (authorized) {
-                code = TransactionCode.APPROVED.getCode();
-                log.info(MESSAGE_SAVING_TRANSACTION_AUTHORIZED);
-                transactionGateway.saveTransaction(transactionRequest);
-            } else {
-                code = TransactionCode.INSUFFICIENT_FUND.getCode();
-            }
+        final BalanceType balanceType = MCC.getBalanceType(mcc);
+        boolean authorized = accountService.authorizeTransaction(accountId,totalAmount, balanceType);
+
+        String code;
+        if (authorized) {
+            code = TransactionCode.APPROVED.getCode();
+            log.info(MESSAGE_SAVING_TRANSACTION_AUTHORIZED);
+            transactionGateway.saveTransaction(transactionRequest);
         } else {
-            code = TransactionCode.NOT_PROCESSED.getCode();
+            code = TransactionCode.INSUFFICIENT_FUND.getCode();
         }
 
         return TransactionResponse.builder().code(code).build();
