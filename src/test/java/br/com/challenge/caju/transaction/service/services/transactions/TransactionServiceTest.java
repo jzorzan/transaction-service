@@ -55,7 +55,7 @@ public class TransactionServiceTest {
     private TransactionRequest validTransactionRequest;
     private Merchant validMerchant;
     private List<Transaction> mockTransactions;
-   
+
 
     @BeforeEach
     void setUp() {
@@ -69,7 +69,7 @@ public class TransactionServiceTest {
                 .merchantName("validMerchant")
                 .mcc(MCC.FOOD_5411.getCode())
                 .build();
-        
+
         final var mockedTransaction = Transaction.builder()
                 .id(UUID.randomUUID().toString())
                 .accountId(MOCKED_ACCOUNT_ID)
@@ -218,7 +218,7 @@ public class TransactionServiceTest {
     void getTransactionsByAccount_ValidAccountId_ReturnsTransactionAccountResponse() {
         when(transactionGateway.getTransactionByAccount(MOCKED_ACCOUNT_ID))
                 .thenReturn(mockTransactions);
-        
+
         TransactionAccountResponse response = transactionService.getTransactionsByAccount(MOCKED_ACCOUNT_ID);
         assertEquals(mockTransactions.size(), response.getTransactions().size());
     }

@@ -1,6 +1,8 @@
 # Transaction Service
 
-The **Transaction Service** is a **Spring Boot application** designed to handle transaction authorization and management using an **in-memory H2 database**. It provides endpoints to authorize transactions, retrieve transactions by account, and integrates with merchant information for transaction processing.
+The **Transaction Service** is a **Spring Boot application** designed to handle transaction authorization and management
+using an **in-memory H2 database**. It provides endpoints to authorize transactions, retrieve transactions by account,
+and integrates with merchant information for transaction processing.
 
 ## Table of Contents
 
@@ -45,24 +47,27 @@ The **Transaction Service** is a **Spring Boot application** designed to handle 
 3. **Build the project:**
     ```bash
     mvn clean install
-   
+
 4. **Run the application:**
      ```bash
    mvn spring-boot:run
-   
+
 5. **The application will start at http://localhost:8080.**
 
 ### Endpoints
 
 - **POST /transactions/authorize**
 - **GET /transactions/account/{account_id}**
-  - Retrieves transactions associated with a specific account.
+    - Retrieves transactions associated with a specific account.
 
 ### Database Configuration
-The application uses an **H2 in-memory database** for development. The database schema and initial data are configured using schema.sql and data.sql files located in the src/main/resources directory. These scripts are executed automatically on application startup (spring.datasource.initialization-mode=always).
 
+The application uses an **H2 in-memory database** for development. The database schema and initial data are configured
+using schema.sql and data.sql files located in the src/main/resources directory. These scripts are executed
+automatically on application startup (spring.datasource.initialization-mode=always).
 
 ### Project Structure
+
 The project follows a standard Maven directory structure and is organized as follows:
 
 - **controllers:** Contains REST controllers handling incoming HTTP requests.
@@ -74,10 +79,11 @@ The project follows a standard Maven directory structure and is organized as fol
 - **repositories:** Spring Data JPA repositories for database operations.
 - **services:** Business logic services for transaction authorization and account management.
 - **utils:** Constants and utility classes.
-  
 
 ### Testing
-  Unit tests are already implemented within the project to verify the functionality of services and controllers. These tests cover various scenarios, including authorization logic, exception handling, and service methods.
+
+Unit tests are already implemented within the project to verify the functionality of services and controllers. These
+tests cover various scenarios, including authorization logic, exception handling, and service methods.
 
 
 

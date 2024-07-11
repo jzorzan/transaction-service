@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Set;
+
 import static br.com.challenge.caju.transaction.service.utils.TestConstants.MOCKED_ACCOUNT_ID;
 import static br.com.challenge.caju.transaction.service.utils.TestConstants.MOCKED_TOTAL_AMOUNT_100;
 import static br.com.challenge.caju.transaction.service.utils.constants.Constants.MESSAGE_INVALID_FIELD_VALUE;
@@ -29,7 +31,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import java.util.Set;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -139,7 +140,7 @@ class TransactionControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get(URL_TRANSACTION_ACCOUNT, MOCKED_ACCOUNT_ID)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .param("accountId",""))
+                        .param("accountId", ""))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(transactionResponse)))
                 .andExpect(jsonPath("$.code").value(TransactionCode.NOT_PROCESSED.getCode()));
