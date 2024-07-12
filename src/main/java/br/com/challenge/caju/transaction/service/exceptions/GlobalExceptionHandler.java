@@ -15,16 +15,6 @@ import static br.com.challenge.caju.transaction.service.utils.constants.Constant
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {TransactionNotFound.class})
-    @ResponseBody
-    protected ResponseEntity<ErrorMessage> handleNotFound(TransactionNotFound ex) {
-        ErrorMessage errorMessage = ErrorMessage.builder()
-                .code(TransactionCode.NOT_PROCESSED.getCode())
-                .message(ex.getMessage())
-                .build();
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
-    }
-
     @ExceptionHandler(value = {InvalidFieldException.class})
     @ResponseBody
     protected ResponseEntity<ErrorMessage> handleInvalidField(InvalidFieldException ex) {

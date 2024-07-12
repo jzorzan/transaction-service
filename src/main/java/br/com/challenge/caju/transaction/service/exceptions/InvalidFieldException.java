@@ -1,11 +1,11 @@
 package br.com.challenge.caju.transaction.service.exceptions;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.Set;
 
-@Data
+@Getter
 @AllArgsConstructor
 public class InvalidFieldException extends RuntimeException {
 

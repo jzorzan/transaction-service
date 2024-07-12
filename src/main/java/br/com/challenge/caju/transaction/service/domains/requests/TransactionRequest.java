@@ -15,9 +15,6 @@ import java.math.BigDecimal;
 @Builder
 public class TransactionRequest implements Serializable {
 
-    @JsonProperty("id")
-    private String id;
-
     @JsonProperty("accountId")
     private String accountId;
 
