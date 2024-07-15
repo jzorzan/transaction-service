@@ -41,7 +41,7 @@ and integrates with merchant information for transaction processing.
 
 2. **Navigate to the project directory:**
     ```bash
-   cd transaction-authorization-service
+   cd transaction-service
 
 3. **Build the project:**
     ```bash
